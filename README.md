@@ -12,4 +12,4 @@
     <li><b>DELETE - delete exist task</b></li>
 </ol>
 
-<p>Для запуска проекта: <code>docker-compose up</code></p>
+<p>Для запуска проекта: <code>docker-compose up</code>, затем <code>./mvnw spring-boot:run</code></p>
