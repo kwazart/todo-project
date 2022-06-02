@@ -1,0 +1,14 @@
+spring:
+  main:
+    allow-circular-references: true
+  data:
+    mongodb:
+      database: todo_db
+      username: login
+      password: password
+      authentication-database: admin
+      port: 27017
+      host: localhost
+
+server:
+  port: 8083
