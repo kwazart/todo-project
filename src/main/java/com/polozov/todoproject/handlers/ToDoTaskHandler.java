@@ -5,12 +5,11 @@ import com.polozov.todoproject.repository.ToDoTaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 @Component
 @RequiredArgsConstructor
@@ -28,13 +27,12 @@ public class ToDoTaskHandler {
         return repository.findById(request.pathVariable("id"))
                 .flatMap(task -> ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(fromObject(task)))
+                .body(BodyInserters.fromValue(task)))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> saveTask(ServerRequest request) {
         Mono<ToDoTask> newTaskMono = request.bodyToMono(ToDoTask.class)
-                .map(t -> new ToDoTask(t.getText(), t.getPriority()))
                 .flatMap(repository::save);
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -44,9 +42,8 @@ public class ToDoTaskHandler {
     public Mono<ServerResponse> update(ServerRequest request) {
         Mono<ToDoTask> newTaskMono = request.bodyToMono(ToDoTask.class)
                 .map(t -> {
-                    ToDoTask toDoTask = new ToDoTask(t.getText(), t.getPriority());
-                    toDoTask.setId(request.pathVariable("id"));
-                    return toDoTask;
+                    t.setId(request.pathVariable("id"));
+                    return t;
                 })
                 .flatMap(repository::save);
         return ServerResponse.ok()

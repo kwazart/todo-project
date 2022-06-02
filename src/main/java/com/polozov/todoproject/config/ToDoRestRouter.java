@@ -17,7 +17,7 @@ public class ToDoRestRouter {
     public RouterFunction<ServerResponse> routeToDoTask(ToDoTaskHandler handler) {
         return RouterFunctions
                 .route(GET("/func/task/{id}"), handler::getTaskById)
-                .andRoute(POST("/func/task/create"), handler::saveTask)
+                .andRoute(POST("/func/task"), handler::saveTask)
                 .andRoute(GET("/func/task"), handler::getAllTasks)
                 .andRoute(PUT("/func/task/{id}"), handler::update)
                 .andRoute(DELETE("/func/task/{id}"), handler::delete)
